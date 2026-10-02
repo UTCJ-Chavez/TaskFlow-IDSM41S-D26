@@ -1,3 +1,5 @@
+from ast import main
+
 from models import (
     KEY_ID,
     KEY_TITLE,
@@ -249,3 +251,4 @@ def search_tasks(tasks, text):
         status = "Completada" if is_completed(task) else "Pendiente"
         print(f"{task[KEY_ID]}. {task[KEY_TITLE]} [{status}]")
 
+    main
