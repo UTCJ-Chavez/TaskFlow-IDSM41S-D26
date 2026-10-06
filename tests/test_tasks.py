@@ -27,7 +27,7 @@ class TestTaskFlow(unittest.TestCase):
         self.assertEqual(len(self.tasks), 1)
         self.assertEqual(self.tasks[0]["id"], 1)
         self.assertEqual(self.tasks[0]["title"], "Estudiar Python")
-        self.assertFalse(self.tasks[0]["completed"])
+        self.assertEqual(self.tasks[0]["status"], "pendiente")
 
     def test_no_agregar_tarea_duplicada(self):
         add_task(self.tasks, "Estudiar Python")
@@ -43,7 +43,7 @@ class TestTaskFlow(unittest.TestCase):
         self.tasks.append({
             "id": 1,
             "title": "Hacer tarea",
-            "completed": False
+            "status": "pendiente"
         })
 
         with patch("sys.stdout", new=StringIO()) as salida:
@@ -52,7 +52,7 @@ class TestTaskFlow(unittest.TestCase):
         resultado = salida.getvalue()
 
         self.assertIn("Hacer tarea", resultado)
-        self.assertIn("1.", resultado)
+        self.assertIn("ID: 1", resultado)
 
     def test_listar_tareas_vacias(self):
         with patch("sys.stdout", new=StringIO()) as salida:
@@ -68,23 +68,23 @@ class TestTaskFlow(unittest.TestCase):
         self.tasks.append({
             "id": 1,
             "title": "Terminar proyecto",
-            "completed": False
+            "status": "pendiente"
         })
 
         complete_task(self.tasks, 1)
 
-        self.assertTrue(self.tasks[0]["completed"])
+        self.assertEqual(self.tasks[0]["status"], "completada")
 
     def test_completar_id_inexistente(self):
         self.tasks.append({
             "id": 1,
             "title": "Terminar proyecto",
-            "completed": False
+            "status": "pendiente"
         })
 
         complete_task(self.tasks, 99)
 
-        self.assertFalse(self.tasks[0]["completed"])
+        self.assertEqual(self.tasks[0]["status"], "pendiente")
 
     # ==========================
     # PRUEBAS: VALIDACIONES
@@ -115,12 +115,12 @@ class TestTaskFlow(unittest.TestCase):
             {
                 "id": 1,
                 "title": "Tarea uno",
-                "completed": False
+                "status": "pendiente"
             },
             {
                 "id": 2,
                 "title": "Tarea dos",
-                "completed": False
+                "status": "pendiente"
             }
         ])
 
@@ -135,7 +135,7 @@ class TestTaskFlow(unittest.TestCase):
         self.tasks.append({
             "id": 1,
             "title": "Tarea importante",
-            "completed": False
+            "status": "pendiente"
         })
 
         delete_task(self.tasks, 1)
@@ -146,7 +146,7 @@ class TestTaskFlow(unittest.TestCase):
         self.tasks.append({
             "id": 1,
             "title": "Tarea de prueba",
-            "completed": False
+            "status": "pendiente"
         })
 
         delete_task(self.tasks, "abc")
